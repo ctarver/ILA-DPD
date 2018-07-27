@@ -1,0 +1,9 @@
+[submodule "OFDM-Matlab"]
+	path = OFDM-Matlab
+	url = https://github.com/ctarver/OFDM-Matlab.git
+[submodule "Power-Amplifier-Model"]
+	path = Power-Amplifier-Model
+	url = https://github.com/ctarver/Power-Amplifier-Model.git
+[submodule "WARPLab-Matlab-Wrapper"]
+	path = WARPLab-Matlab-Wrapper
+	url = https://github.com/ctarver/WARPLab-Matlab-Wrapper.git
