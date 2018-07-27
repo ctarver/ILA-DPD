@@ -34,6 +34,10 @@ Once the DPD is trained, you can predistort any samples with the model using the
 
 Check out the example.m to see more. 
 
+## Result: 
+Running this code on the WARP board, I obtained the following power spectral density plot. Here, I am using a 5 MHz LTE like signal. With DPD, we can see less spectral regrowth around the carrier.
+![PSD](https://raw.githubusercontent.com/ctarver/ILA-DPD/master/psd_example.png?token=ACLnMTVWU6jnNqXKfcndnWRs5eeq5Ph8ks5bZG90wA%3D%3D "WARP Board PSD")
+
 ## Theory of Operation:
 The DPD is a nonlinear function that approximates an inverse of the PA's nonlinearities so that the sum output is linear. The DPD in principle can be modeled in any fashion. I have chosen to use a Parallel Hammerstein model. This consists of multiple nonlinear branches where each is followed by an FIR filter to model memory effects. The parallel Hammerstein model is widely chosen for its balance between modeling performance and complexity. 
 
