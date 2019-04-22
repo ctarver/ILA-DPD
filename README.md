@@ -5,7 +5,7 @@
 Please cite the repo if you use it in your projects. An example bibtex entry is below.
 
 ```
-@misc{GitHubOpenSourceSurvey2017,
+@misc{TarverILADPD,
   author       = {Tarver, Chance},
   title        = {DPD Using Indirect Learning Architecture},
   month        = apr,
