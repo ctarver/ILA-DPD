@@ -44,7 +44,7 @@ The 'params' stuct needs to contain the following:
  - `params.memory_depth`: Memory depth used on each branch of the parllel hammerstein DPD model. Can be any positive integer.
  - `params.nIterateions`: Number of times to go through the indirect learning iterations. Can be any positive integer. Usually doesn't need to be higher than 5.
   
-The DPD model can be trained by `dpd.perform_learning(tx_data, board);`. The `tx_data` is a column vector of IQ data to send through the PA for generating a model. The `board` is a PA class that needs to have a `transmit` method. This works with my [PA model](https://github.com/ctarver/Power-Amplifier-Model) or (WARPLab Wrapper)[https://github.com/ctarver/WARPLab-Matlab-Wrapper].
+The DPD model can be trained by `dpd.perform_learning(tx_data, board);`. The `tx_data` is a column vector of IQ data to send through the PA for generating a model. The `board` is a PA class that needs to have a `transmit` method. This works with my [PA model](https://github.com/ctarver/Power-Amplifier-Model) or [WARPLab Wrapper](https://github.com/ctarver/WARPLab-Matlab-Wrapper).
 
 Once the DPD is trained, you can predistort any samples with the model using the `predistort` method. Just do `dpd.predistort(tx_data);`
 
