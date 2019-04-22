@@ -62,6 +62,9 @@ classdef ILA_DPD < handle
             obj.nIterations = params.nIterations;
             obj.block_size = params.block_size;
             
+            obj.use_conj = params.use_conj;
+            obj.use_dc_term = params.use_dc_term;
+            
             % Start DPD coeffs being completely linear (no effect)
             obj.coeffs = zeros(obj.convert_order_to_number_of_coeffs, obj.memory_depth);
             obj.coeffs(1) = 1;
@@ -141,6 +144,7 @@ classdef ILA_DPD < handle
             number_of_basis_vectors = obj.memory_depth * obj.convert_order_to_number_of_coeffs;
             X = zeros(length(x), number_of_basis_vectors);
             
+            % Main branch
             count = 1;
             for i = 1:2:obj.order
                 branch = x .* abs(x).^(i-1);
@@ -150,6 +154,24 @@ classdef ILA_DPD < handle
                     X(:, count) = delayed_version;
                     count = count + 1;
                 end
+            end
+            
+            if obj.use_conj
+                % Conjugate branch
+                for i = 1:2:obj.order
+                    branch = conj(x) .* abs(x).^(i-1);
+                    for j = 1:obj.memory_depth
+                        delayed_version = zeros(size(branch));
+                        delayed_version(j:end) = branch(1:end - j + 1);
+                        X(:, count) = delayed_version;
+                        count = count + 1;
+                    end
+                end
+            end
+            
+            % DC
+            if obj.use_dc_term
+                X(:, count) = 1;
             end
         end
         
@@ -170,7 +192,7 @@ classdef ILA_DPD < handle
             end
             
             if obj.use_dc_term
-               number_of_coeffs = number_of_coeffs + 1;
+                number_of_coeffs = number_of_coeffs + 1;
             end
         end
         

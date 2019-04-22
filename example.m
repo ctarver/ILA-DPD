@@ -39,21 +39,32 @@ upsampled_tx_data = up_sample(tx_data, Fs, modulator.sampling_rate);
 tx_data = normalize_for_pa(upsampled_tx_data, rms_input);
 
 % Setup DPD
-dpd_params.order = 7;
+dpd_params.order = 11;
 dpd_params.memory_depth = 4;
 dpd_params.nIterations = 2;
 dpd_params.block_size = 50000;
+
+dpd_params.use_conj = 1;
+dpd_params.use_dc_term = 1;
+conj_dpd = ILA_DPD(dpd_params);
+
+dpd_params.use_conj = 0;
+dpd_params.use_dc_term = 0;
 dpd = ILA_DPD(dpd_params);
 
 %% Run Expierement
 w_out_dpd = board.transmit(tx_data);
+conj_dpd.perform_learning(tx_data, board);
+w_conj_dpd = board.transmit(conj_dpd.predistort(tx_data));
+
 dpd.perform_learning(tx_data, board);
 w_dpd = board.transmit(dpd.predistort(tx_data));
 
 %% Plot
 plot_results('psd', 'Original TX signal', tx_data, 40e6)
 plot_results('psd', 'No DPD', w_out_dpd, 40e6)
-plot_results('psd', 'With DPD', w_dpd, 40e6)
+plot_results('psd', 'With Normal DPD', w_dpd, 40e6)
+plot_results('psd', 'With Conjug DPD', w_conj_dpd, 40e6)
 
 %% Some helper functions
 function out = up_sample(in, Fs, sampling_rate)
