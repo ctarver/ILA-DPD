@@ -36,6 +36,8 @@ classdef ILA_DPD < handle
         nIterations   % Number of iterations used in the ILA learning
         block_size    % Block size used for each iteration in the learning
         coeffs        % DPD coefficients
+        use_conj      % Use a conjugate branch as well
+        use_dc_term   % use a dc term
     end
     
     methods
@@ -47,6 +49,8 @@ classdef ILA_DPD < handle
                 params.memory_depth = 3;
                 params.nIterations = 3;
                 params.block_size = 50000;
+                params.use_conj = 0;
+                params.use_dc_term = 0;
             end
             
             if mod(params.order, 2) == 0
@@ -158,7 +162,16 @@ classdef ILA_DPD < handle
             if nargin == 1
                 order = obj.order;
             end
+            
             number_of_coeffs = (order + 1) / 2;
+            
+            if obj.use_conj
+                number_of_coeffs = 2 * number_of_coeffs;
+            end
+            
+            if obj.use_dc_term
+               number_of_coeffs = number_of_coeffs + 1;
+            end
         end
         
         

@@ -11,9 +11,12 @@ classdef webRF < handle
     end
     
     methods
-        function obj = webRF()
+        function obj = webRF(dbm_power)
             %webRF Construct an instance of this class
-            obj.RMSin = -21;
+            if nargin == 0
+               dbm_power = -24; 
+            end
+            obj.RMSin = dbm_power;
             obj.synchronization.sub_sample = 1;
         end
         
