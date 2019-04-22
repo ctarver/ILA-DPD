@@ -1,5 +1,21 @@
 # DPD Using Indirect Learning Architecture.
+[![DOI](https://zenodo.org/badge/142376314.svg)](https://zenodo.org/badge/latestdoi/142376314)
 
+## How to Cite
+Please cite the repo if you use it in your projects. An example bibtex entry is below.
+
+```
+@misc{GitHubOpenSourceSurvey2017,
+  author       = {Tarver, Chance},
+  title        = {DPD Using Indirect Learning Architecture},
+  month        = apr,
+  year         = 2019,
+  doi          = {10.5281/zenodo.2648687},
+}
+```
+
+
+## Introduction
 Power amplifiers (PAs) are nonlinear devices. These nonlinearities contribute to distortions such as spectral regrowth around a carrier. There are limits placed by the 3GPP and FCC on this adjacent carrier leakage and other nonlinear artifacts.
 
 To counter this, we can predistort with an inverse of the PA's nonlinearities. A standard way of doing that is via an indirect learning architecture. A challenge with designing a predistorter is that we don't know what the predistorter output should be, so we can directly use least squares to solve for the predisorter design. An indirect learning architecture allows us to circumvent this.
