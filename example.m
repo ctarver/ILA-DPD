@@ -61,10 +61,10 @@ dpd.perform_learning(tx_data, board);
 w_dpd = board.transmit(dpd.predistort(tx_data));
 
 %% Plot
-plot_results('psd', 'Original TX signal', tx_data, 40e6)
-plot_results('psd', 'No DPD', w_out_dpd, 40e6)
-plot_results('psd', 'With Normal DPD', w_dpd, 40e6)
-plot_results('psd', 'With Conjug DPD', w_conj_dpd, 40e6)
+plot_results('psd', 'Original TX signal', tx_data, Fs)
+plot_results('psd', 'No DPD', w_out_dpd, Fs)
+plot_results('psd', 'With Normal DPD', w_dpd, Fs)
+plot_results('psd', 'With Conjug DPD', w_conj_dpd, Fs)
 
 %% Some helper functions
 function out = up_sample(in, Fs, sampling_rate)
