@@ -8,9 +8,9 @@ Please cite the repo if you use it in your projects. An example bibtex entry is 
 @misc{TarverILADPD,
   author       = {Tarver, Chance},
   title        = {GMP DPD Using Indirect Learning Architecture Matlab Library},
-  month        = apr,
+  month        = sep,
   year         = 2019,
-  doi          = {10.5281/zenodo.2648687},
+  doi          = {10.5281/zenodo.3463608 },
 }
 ```
 
