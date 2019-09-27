@@ -1,4 +1,4 @@
-function plot_results(type, label, data, data2)
+function plot_results(type, label, data, data2, data3)
 %plot_results Plot our various results
 
 switch type
@@ -17,11 +17,14 @@ switch type
         Nfft    = 1024;
         Window  = kaiser(1000,9);
         Signal_PSD = 10*log10(fftshift(pwelch(data,Window)));
-        plot((-1:2/Nfft:1-2/Nfft)*((data2)/(2e6)), Signal_PSD, 'LineWidth', 0.5, 'DisplayName', label);
+        plot((-1:2/Nfft:1-2/Nfft)*((data2)/(2e6)), Signal_PSD, ...
+            'Color', data3, ...
+            'LineWidth', 0.5, ...
+            'DisplayName', label);
         xlabel('Frequency (MHz)')
         ylabel('PSD')
         hold on;
-        legend(gca,'show');
+        legend(gca, 'show', 'Interpreter', 'latex');
         grid on;
         
 %         [pxx,f] = pwelch(data, [], [], 256, data2, 'maxhold','centered', 'psd');      
