@@ -80,6 +80,12 @@ URL: http://ieeexplore.ieee.org/stamp/stamp.jsp?tp=&arnumber=5431085&isnumber=54
 
 ## History
 
+### v1.1.1 
+January 29, 2020
+
+* Added a learning rate
+* Added a history so you can see the change in coeffs over each iteration
+
 ### v1.1
 Sept 27th, 2019
 
