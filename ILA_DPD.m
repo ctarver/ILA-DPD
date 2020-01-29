@@ -39,6 +39,7 @@ classdef ILA_DPD < handle
         use_conj      % Use a conjugate branch as well
         use_dc_term   % use a dc term
         learning_rate % How much of the new iteration to use vs previous iteration. Should be in (0, 1]
+        history       % Holds onto the coeffs used at each iteration
     end
     
     methods
@@ -96,6 +97,7 @@ classdef ILA_DPD < handle
             %
             % We can set this up as a least squares regression problem.
             
+            obj.history = obj.coeffs;
             for iteration = 1:obj.nIterations
                 % Forward through Predistorter
                 u = obj.predistort(x);
@@ -105,6 +107,7 @@ classdef ILA_DPD < handle
                 Y = setup_basis_matrix(obj, y);
                 ls_result = ls_estimation(obj, Y, u);
                 obj.coeffs = (1-obj.learning_rate) * obj.coeffs + (obj.learning_rate) * ls_result;
+                obj.history = [obj.history obj.coeffs];
             end
         end
         
@@ -225,6 +228,18 @@ classdef ILA_DPD < handle
             
             X = obj.setup_basis_matrix(x);
             out = X * obj.coeffs;
+        end
+        
+        function plot_history(obj)
+            % plot_history. Plots how the magnitude of the DPD coeffs
+            % evolved over each iteration.
+            figure(55);
+            hold on;
+            plot(abs(obj.history'));
+            title('History for DPD Coeffs Learning');
+            xlabel('Iteration Number');
+            ylabel('abs(coeffs)');
+            grid on;
         end
     end
 end

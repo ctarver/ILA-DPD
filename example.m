@@ -61,6 +61,8 @@ plot_results('psd', 'No DPD', w_out_dpd, Fs, 'r')
 label = sprintf('$P = %d,$\n $M = %d,$\n $L = %d$', dpd_params.order, dpd_params.memory_depth, dpd_params.lag_depth);
 plot_results('psd', label, w_dpd, Fs, 'g')
 
+dpd.plot_history
+
 %% Some helper functions
 function out = up_sample(in, Fs, sampling_rate)
 upsample_rate = floor(Fs/sampling_rate);
