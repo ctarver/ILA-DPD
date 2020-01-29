@@ -38,6 +38,7 @@ classdef ILA_DPD < handle
         coeffs        % DPD coefficients
         use_conj      % Use a conjugate branch as well
         use_dc_term   % use a dc term
+        learning_rate % How much of the new iteration to use vs previous iteration. Should be in (0, 1]
     end
     
     methods
@@ -51,6 +52,7 @@ classdef ILA_DPD < handle
                 params.nIterations = 3;
                 params.use_conj = 0;
                 params.use_dc_term = 0;
+                params.learning_rate = 0.75;
             end
             
             if mod(params.order, 2) == 0
@@ -61,6 +63,7 @@ classdef ILA_DPD < handle
             obj.memory_depth = params.memory_depth;
             obj.lag_depth = params.lag_depth;
             obj.nIterations = params.nIterations;
+            obj.learning_rate = params.learning_rate;
             
             obj.use_conj = params.use_conj;
             obj.use_dc_term = params.use_dc_term;
@@ -100,7 +103,8 @@ classdef ILA_DPD < handle
                 
                 % Learn on postdistrter
                 Y = setup_basis_matrix(obj, y);
-                obj.coeffs = ls_estimation(obj, Y, u);
+                ls_result = ls_estimation(obj, Y, u);
+                obj.coeffs = (1-obj.learning_rate) * obj.coeffs + (obj.learning_rate) * ls_result;
             end
         end
         
