@@ -37,7 +37,7 @@ modulator = OFDM(ofdm_params);
 % Create TX Data
 [tx_data, ~] = modulator.use;
 tx_data = Signal(tx_data, modulator.sampling_rate, rms_input);
-tx_data.upsample(Fs)
+tx_data.upsample(board.sample_rate)
 
 % Setup DPD
 dpd_params.order = 9;
