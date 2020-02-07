@@ -80,6 +80,7 @@ URL: http://ieeexplore.ieee.org/stamp/stamp.jsp?tp=&arnumber=5431085&isnumber=54
 
 ## History
 
+* Added support for even order terms in the memory polynomial
 ### v1.1.1 
 January 29, 2020
 

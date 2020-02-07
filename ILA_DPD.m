@@ -32,6 +32,7 @@ classdef ILA_DPD < handle
     
     properties
         order         % Nonlinear order of model. Can only be odd.
+        use_even      % Include even order terms? true or false
         memory_depth  % Memory depth on each branch of the parallel hammerstein model
         lag_depth     % Memory depth of the lead/lag term in GMP
         nIterations   % Number of iterations used in the ILA learning
@@ -61,6 +62,7 @@ classdef ILA_DPD < handle
             end
             
             obj.order = params.order;
+            obj.use_even = params.use_even;
             obj.memory_depth = params.memory_depth;
             obj.lag_depth = params.lag_depth;
             obj.nIterations = params.nIterations;
@@ -70,8 +72,14 @@ classdef ILA_DPD < handle
             obj.use_dc_term = params.use_dc_term;
             
             % Start DPD coeffs being completely linear (no effect)
-            n_coeffs = obj.convert_order_to_number_of_coeffs * obj.memory_depth + ...
-                2*((obj.convert_order_to_number_of_coeffs-1) * obj.memory_depth * obj.lag_depth);
+            if obj.use_even
+                assert(obj.lag_depth == 0, 'GMP not yet supported for even terms. Set lag_depth=0');
+                n_coeffs = obj.order * obj.memory_depth;
+            else
+                n_coeffs = obj.convert_order_to_number_of_coeffs * obj.memory_depth + ...
+                    2*((obj.convert_order_to_number_of_coeffs-1) * obj.memory_depth * obj.lag_depth);
+            end
+            
             if obj.use_conj
                 n_coeffs = 2*n_coeffs;
             end
@@ -151,9 +159,16 @@ classdef ILA_DPD < handle
             number_of_basis_vectors = numel(obj.coeffs);
             X = zeros(length(x), number_of_basis_vectors);
             
+            if obj.use_even
+                step_size = 1;
+            else
+                step_size = 2;
+            end
+                
+            
             % Main branch
             count = 1;
-            for i = 1:2:obj.order
+            for i = 1:step_size:obj.order
                 branch = x .* abs(x).^(i-1);
                 for j = 1:obj.memory_depth
                     delayed_version = zeros(size(branch));
@@ -164,7 +179,7 @@ classdef ILA_DPD < handle
             end
             
             % Lag term
-            for k = 3:2:obj.order  % Lag/Lead doesn't exist for k=1
+            for k = 3:step_size:obj.order  % Lag/Lead doesn't exist for k=1
                 absolute_value_part_base = abs(x).^(k-1);
                 for m = 1:obj.lag_depth
                     lagged_abs = [zeros(m,1); absolute_value_part_base(1:end-m)];
@@ -177,7 +192,7 @@ classdef ILA_DPD < handle
             end
             
             % Lead term
-            for k = 3:2:obj.order  % Lag/Lead doesn't exist for k=1
+            for k = 3:step_size:obj.order  % Lag/Lead doesn't exist for k=1
                 absolute_value_part_base = abs(x).^(k-1);
                 for m = 1:obj.lag_depth
                     lead_abs = [absolute_value_part_base(1+m:end); zeros(m,1)];
@@ -191,7 +206,7 @@ classdef ILA_DPD < handle
             
             if obj.use_conj
                 % Conjugate branch
-                for i = 1:2:obj.order
+                for i = 1:step_size:obj.order
                     branch = conj(x) .* abs(x).^(i-1);
                     for j = 1:obj.memory_depth
                         delayed_version = zeros(size(branch));
