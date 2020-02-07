@@ -31,7 +31,6 @@ ofdm_params.nSubcarriers = 1200;
 ofdm_params.subcarrier_spacing = 15e3; % 15kHz subcarrier spacing
 ofdm_params.constellation = 'QPSK';
 ofdm_params.cp_length = 144; % Number of samples in cyclic prefix.
-ofdm_params.nSymbols = 10;
 ofdm_params.nSymbols = 14;
 modulator = OFDM(ofdm_params);
 
@@ -43,8 +42,8 @@ tx_data.upsample(Fs)
 % Setup DPD
 dpd_params.order = 9;
 dpd_params.memory_depth = 4;
-dpd_params.lag_depth = 2;  % 0 is a standard MP. >0 is GMP.
-dpd_params.nIterations = 2;
+dpd_params.lag_depth = 0;  % 0 is a standard MP. >0 is GMP.
+dpd_params.nIterations = 4;
 dpd_params.learning_rate = 0.5; 
 dpd_params.use_even = true; 
 dpd_params.use_conj = 0;    % Conjugate branch. Currently only set up for MP (lag = 0)
