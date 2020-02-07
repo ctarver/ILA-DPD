@@ -57,6 +57,13 @@ Running this code on RFWebLab, I obtained the following power spectral density p
 Here, ***P*** represents the nonlinearity order, ***M*** is the memory depth, and ***L*** is the lag/lead amount. 
 ![PSD](https://raw.githubusercontent.com/ctarver/ILA-DPD/master/psd_example.png?token=ACLnMTVWU6jnNqXKfcndnWRs5eeq5Ph8ks5bZG90wA%3D%3D "RFWebLab PSD")
 
+### History plotting:
+![Coeffs and History Over Time](History.png "Coeffs and History Over Time")
+Here you can see the coefficients converge. The learning rate is set to 0.5 in this example. The L1 is the 20 MHz channel to the left of the main channel and the U1 is the 20 MHz to the right.
+
+![history](history.png)
+Before DPD, hte U1 is at -35.7 dBc. After the final iteration we are down to -38 dBc.
+
 ## TODOs:
 
 * Convert to completely use the "Signal" class to handle the moving of data between objects
