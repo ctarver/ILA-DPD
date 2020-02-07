@@ -107,7 +107,7 @@ classdef ILA_DPD < handle
             % We can set this up as a least squares regression problem.
             
             obj.coeff_history = obj.coeffs;
-            obj.result_history  = zeros(3, obj.nIterations);
+            obj.result_history  = zeros(3, obj.nIterations+1);
             for iteration = 1:obj.nIterations
                 % Forward through Predistorter
                 u = obj.predistort(x);
@@ -119,6 +119,10 @@ classdef ILA_DPD < handle
                 obj.coeffs = (1-obj.learning_rate) * obj.coeffs + (obj.learning_rate) * ls_result;
                 obj.coeff_history = [obj.coeff_history obj.coeffs];
             end
+            % Need extra to evaluate final iteration
+            u = obj.predistort(x);
+            [~, test_signal] = pa.transmit(u); % Transmit the predistorted pa input
+            obj.result_history(:, iteration+1) = test_signal.measure_all_powers;
         end
         
         
@@ -251,15 +255,17 @@ classdef ILA_DPD < handle
             % plot_history. Plots how the magnitude of the DPD coeffs
             % evolved over each iteration.
             figure(55);
+            iterations = 0:obj.nIterations;            
             subplot(1,2,1)
             hold on;
-            plot(abs(obj.coeff_history'));
+            plot(iterations, abs(obj.coeff_history'));
             title('History for DPD Coeffs Learning');
             xlabel('Iteration Number');
             ylabel('abs(coeffs)');
             grid on;
             subplot(1,2,2)
-            plot((obj.result_history'));
+            
+            plot(iterations, (obj.result_history'));
             grid on;
             title('Performance vs Iteration');
             ylabel('dBm');
