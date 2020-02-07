@@ -37,8 +37,8 @@ modulator = OFDM(ofdm_params);
 
 % Create TX Data
 [tx_data, ~] = modulator.use;
-upsampled_tx_data = up_sample(tx_data, Fs, modulator.sampling_rate);
-tx_data = normalize_for_pa(upsampled_tx_data, rms_input);
+tx_data = Signal(tx_data, modulator.sampling_rate, rms_input);
+tx_data.upsample(Fs)
 
 % Setup DPD
 dpd_params.order = 9;
@@ -62,24 +62,3 @@ label = sprintf('$P = %d,$\n $M = %d,$\n $L = %d$', dpd_params.order, dpd_params
 plot_results('psd', label, w_dpd, Fs, 'g')
 
 dpd.plot_history
-
-%% Some helper functions
-function out = up_sample(in, Fs, sampling_rate)
-upsample_rate = floor(Fs/sampling_rate);
-up = upsample(in, upsample_rate);
-b = firls(255,[0 (1/upsample_rate -0.02) (1/upsample_rate +0.02) 1],[1 1 0 0]);
-out = filter(b,1,up);
-end
-
-function [out, scale_factor] = normalize_for_pa(in, RMS_power)
-scale_factor = RMS_power/rms(in);
-out = in * scale_factor;
-if abs(rms(out) - RMS_power) > 0.01
-    error('RMS is wrong.');
-end
-
-max_real = max(abs(real(out)));
-max_imag = max(abs(imag(out)));
-max_max = max(max_real, max_imag);
-fprintf('Maximum value: %1.2f\n', max_max);
-end

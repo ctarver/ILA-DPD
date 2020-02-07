@@ -111,6 +111,7 @@ classdef ILA_DPD < handle
                 u = obj.predistort(x);
                 y = pa.transmit(u); % Transmit the predistorted pa input
                 
+                test_signal = Signal(y_original, pa.sample_rate);
                 % Learn on postdistrter
                 Y = setup_basis_matrix(obj, y);
                 ls_result = ls_estimation(obj, Y, u);
