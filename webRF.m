@@ -8,6 +8,7 @@ classdef webRF < handle
         Idc
         Vdc
         synchronization
+        sample_rate = 200e6;
     end
     
     methods
