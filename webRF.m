@@ -37,9 +37,9 @@ classdef webRF < handle
             end
             [y_original, obj.RMSout, obj.Idc, obj.Vdc] = RFWebLab_PA_meas_v1_1(x, obj.RMSin);
             
-            
             % Need something to guarantee same as input length and aligned in TD.
             y = [y_original(7:end)];
+            y_original = Signal(y_original, obj.sample_rate);
             length_input = length(x);
             length_output = length(y);
             y = [y; zeros(length_input - length_output, 1)];

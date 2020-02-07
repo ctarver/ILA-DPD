@@ -111,9 +111,7 @@ classdef ILA_DPD < handle
             for iteration = 1:obj.nIterations
                 % Forward through Predistorter
                 u = obj.predistort(x);
-                [y, y_original] = pa.transmit(u); % Transmit the predistorted pa input
-                
-                test_signal = Signal(y_original, pa.sample_rate);
+                [y, test_signal] = pa.transmit(u); % Transmit the predistorted pa input
                 obj.result_history(:, iteration) = test_signal.measure_all_powers;
                 % Learn on postdistrter
                 Y = setup_basis_matrix(obj, y);
