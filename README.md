@@ -62,7 +62,8 @@ Here, ***P*** represents the nonlinearity order, ***M*** is the memory depth, an
 Here you can see the coefficients converge. The learning rate is set to 0.5 in this example. The L1 is the 20 MHz channel to the left of the main channel and the U1 is the 20 MHz to the right.
 
 ![history](history.png)
-Before DPD, hte U1 is at -35.7 dBc. After the final iteration we are down to -38 dBc.
+
+Before DPD, the U1 is at -35.7 dBc. After the final iteration we are down to -38 dBc.
 
 ## TODOs:
 
