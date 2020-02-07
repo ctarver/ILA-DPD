@@ -264,9 +264,9 @@ classdef ILA_DPD < handle
             plot((obj.result_history'));
             grid on;
             title('Performance vs Iteration');
-            ylabel('dBc/dBm');
+            ylabel('dBm');
             xlabel('Iteration Number');
-            legend('Main Channel (dBm)','L1 (dBc)', 'U1 (dBc)', 'Location', 'best')
+            legend('L1', 'Main Channel', 'U1', 'Location', 'best')
         end
     end
 end
