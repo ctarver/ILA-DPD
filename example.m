@@ -51,9 +51,9 @@ dpd_params.use_dc_term = 0; % Adds an additional term for DC
 dpd = ILA_DPD(dpd_params);
 
 %% Run Expierement
-w_out_dpd = board.transmit(tx_data);
-dpd.perform_learning(tx_data, board);
-w_dpd = board.transmit(dpd.predistort(tx_data));
+[~, w_out_dpd] = board.transmit(tx_data.data);
+dpd.perform_learning(tx_data.data, board);
+[~, w_dpd] = board.transmit(dpd.predistort(tx_data.data));
 
 %% Plot
 plot_results('psd', 'No DPD', w_out_dpd, Fs, 'r')

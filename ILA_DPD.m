@@ -40,7 +40,8 @@ classdef ILA_DPD < handle
         use_conj      % Use a conjugate branch as well
         use_dc_term   % use a dc term
         learning_rate % How much of the new iteration to use vs previous iteration. Should be in (0, 1]
-        history       % Holds onto the coeffs used at each iteration
+        coeff_history % Holds onto the coeffs used at each iteration
+        result_history % Holds intermediate ACLR for each point during training in case of divergence. 
     end
     
     methods
@@ -105,18 +106,20 @@ classdef ILA_DPD < handle
             %
             % We can set this up as a least squares regression problem.
             
-            obj.history = obj.coeffs;
+            obj.coeff_history = obj.coeffs;
+            obj.result_history  = zeros(3, obj.nIterations);
             for iteration = 1:obj.nIterations
                 % Forward through Predistorter
                 u = obj.predistort(x);
-                y = pa.transmit(u); % Transmit the predistorted pa input
+                [y, y_original] = pa.transmit(u); % Transmit the predistorted pa input
                 
                 test_signal = Signal(y_original, pa.sample_rate);
+                obj.result_history(:, iteration) = test_signal.measure_all_powers;
                 % Learn on postdistrter
                 Y = setup_basis_matrix(obj, y);
                 ls_result = ls_estimation(obj, Y, u);
                 obj.coeffs = (1-obj.learning_rate) * obj.coeffs + (obj.learning_rate) * ls_result;
-                obj.history = [obj.history obj.coeffs];
+                obj.coeff_history = [obj.coeff_history obj.coeffs];
             end
         end
         
@@ -250,13 +253,20 @@ classdef ILA_DPD < handle
             % plot_history. Plots how the magnitude of the DPD coeffs
             % evolved over each iteration.
             figure(55);
+            subplot(1,2,1)
             hold on;
-            plot(abs(obj.history'));
+            plot(abs(obj.coeff_history'));
             title('History for DPD Coeffs Learning');
             xlabel('Iteration Number');
             ylabel('abs(coeffs)');
             grid on;
+            subplot(1,2,2)
+            plot((obj.result_history'));
+            grid on;
+            title('Performance vs Iteration');
+            ylabel('dBc/dBm');
+            xlabel('Iteration Number');
+            legend('Main Channel (dBm)','L1 (dBc)', 'U1 (dBc)', 'Location', 'best')
         end
     end
 end
-
