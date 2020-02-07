@@ -56,8 +56,6 @@ dpd.perform_learning(tx_data.data, board);
 [~, w_dpd] = board.transmit(dpd.predistort(tx_data.data));
 
 %% Plot
-plot_results('psd', 'No DPD', w_out_dpd, Fs, 'r')
-label = sprintf('$P = %d,$\n $M = %d,$\n $L = %d$', dpd_params.order, dpd_params.memory_depth, dpd_params.lag_depth);
-plot_results('psd', label, w_dpd, Fs, 'g')
-
-dpd.plot_history
+w_out_dpd.plot_psd;
+w_dpd.plot_psd;
+dpd.plot_history;
