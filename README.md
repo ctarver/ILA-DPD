@@ -10,7 +10,7 @@ Please cite the repo if you use it in your projects. An example bibtex entry is 
   title        = {GMP DPD Using Indirect Learning Architecture Matlab Library},
   month        = sep,
   year         = 2019,
-  doi          = {10.5281/zenodo.3463608 },
+  doi          = {put apprpriate doi here from current doi above},
 }
 ```
 
@@ -41,6 +41,7 @@ Initialize with:
 
 The 'params' stuct needs to contain the following:
  - `params.order`: Nonlinear order of the DPD model. Must be an odd integer.
+ - `params.use_even`: Should we include even order terms in the model? True or False  
  - `params.memory_depth`: Memory depth used on each branch of the parllel hammerstein DPD model. Can be any positive integer.
  - `params.lag_depth`: Memory lag/lead depth used on each cross term branch of the GMP DPD model. Can be any positive integer. If 0, then this becomes a parallel Hammerstein memory polynomial.
  - `params.nIterations`: Number of times to go through the indirect learning iterations. Can be any positive integer. Usually doesn't need to be higher than 4.
@@ -55,6 +56,11 @@ Check out the example.m to see more.
 Running this code on RFWebLab, I obtained the following power spectral density plot. Here, I am using a 20 MHz LTE like signal. With DPD, we can see less spectral regrowth around the carrier. 
 Here, ***P*** represents the nonlinearity order, ***M*** is the memory depth, and ***L*** is the lag/lead amount. 
 ![PSD](https://raw.githubusercontent.com/ctarver/ILA-DPD/master/psd_example.png?token=ACLnMTVWU6jnNqXKfcndnWRs5eeq5Ph8ks5bZG90wA%3D%3D "RFWebLab PSD")
+
+## TODOs:
+
+* Convert to completely use the "Signal" class to handle the moving of data between objects
+* Add even terms to GMP.
 
 ## Theory of Operation:
 The DPD is a nonlinear function that approximates an inverse of the PA's nonlinearities so that the sum output is linear. The DPD in principle can be modeled in any fashion. I have chosen to use a Parallel Hammerstein model. This consists of multiple nonlinear branches where each is followed by an FIR filter to model memory effects. The parallel Hammerstein model is widely chosen for its balance between modeling performance and complexity. 
@@ -80,7 +86,14 @@ URL: http://ieeexplore.ieee.org/stamp/stamp.jsp?tp=&arnumber=5431085&isnumber=54
 
 ## History
 
+### v1.2
+February 7, 2020
+
 * Added support for even order terms in the memory polynomial
+* Added a Signal class to give more structure to the passing of data around. 
+* Added a history to the ACLR performance over iteration so you could choose the coeffs that did the best in case the learning diverges
+* Made PSD measurments accurate with rfweblab output for RMS out 
+
 ### v1.1.1 
 January 29, 2020
 
