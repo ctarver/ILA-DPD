@@ -41,7 +41,7 @@ classdef ILA_DPD < handle
         use_dc_term   % use a dc term
         learning_rate % How much of the new iteration to use vs previous iteration. Should be in (0, 1]
         coeff_history % Holds onto the coeffs used at each iteration
-        result_history % Holds intermediate ACLR for each point during training in case of divergence. 
+        result_history % Holds intermediate ACLR for each point during training in case of divergence.
     end
     
     methods
@@ -166,7 +166,7 @@ classdef ILA_DPD < handle
             else
                 step_size = 2;
             end
-                
+            
             
             % Main branch
             count = 1;
