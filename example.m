@@ -54,6 +54,9 @@ dpd = ILA_DPD(dpd_params);
 dpd.perform_learning(tx_data.data, board);
 [~, w_dpd] = board.transmit(dpd.predistort(tx_data.data));
 
+before = w_out_dpd.measure_all_powers;
+after = w_dpd.measure_all_powers;
+
 %% Plot
 w_out_dpd.plot_psd;
 w_dpd.plot_psd;
