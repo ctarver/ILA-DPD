@@ -40,6 +40,7 @@ classdef ILA_DPD < handle
         use_conj      % Use a conjugate branch as well
         use_dc_term   % use a dc term
         learning_rate % How much of the new iteration to use vs previous iteration. Should be in (0, 1]
+        learning_method % Newton or ema
         coeff_history % Holds onto the coeffs used at each iteration
         result_history % Holds intermediate ACLR for each point during training in case of divergence.
     end
@@ -68,7 +69,7 @@ classdef ILA_DPD < handle
             obj.lag_depth = params.lag_depth;
             obj.nIterations = params.nIterations;
             obj.learning_rate = params.learning_rate;
-            
+            obj.learning_method = params.learning_method;
             obj.use_conj = params.use_conj;
             obj.use_dc_term = params.use_dc_term;
             
@@ -115,8 +116,16 @@ classdef ILA_DPD < handle
                 obj.result_history(:, iteration) = test_signal.measure_all_powers;
                 % Learn on postdistrter
                 Y = setup_basis_matrix(obj, y);
-                ls_result = ls_estimation(obj, Y, u);
-                obj.coeffs = (1-obj.learning_rate) * obj.coeffs + (obj.learning_rate) * ls_result;
+                switch obj.learning_method
+                    case 'newton'
+                        post_distorter_out = obj.predistort(y);
+                        error = u - post_distorter_out;
+                        ls_result = ls_estimation(obj, Y, error);
+                        obj.coeffs = obj.coeffs + (obj.learning_rate) * ls_result;
+                    case 'ema'
+                        ls_result = ls_estimation(obj, Y, u);
+                        obj.coeffs = (1-obj.learning_rate) * obj.coeffs + (obj.learning_rate) * ls_result;
+                end
                 obj.coeff_history = [obj.coeff_history obj.coeffs];
             end
             % Need extra to evaluate final iteration
@@ -255,7 +264,7 @@ classdef ILA_DPD < handle
             % plot_history. Plots how the magnitude of the DPD coeffs
             % evolved over each iteration.
             figure(55);
-            iterations = 0:obj.nIterations;            
+            iterations = 0:obj.nIterations;
             subplot(1,2,1)
             hold on;
             plot(iterations, abs(obj.coeff_history'));

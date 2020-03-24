@@ -43,7 +43,8 @@ dpd_params.order = 9;
 dpd_params.memory_depth = 4;
 dpd_params.lag_depth = 0;  % 0 is a standard MP. >0 is GMP.
 dpd_params.nIterations = 8;
-dpd_params.learning_rate = 0.5; 
+dpd_params.learning_rate = 0.5;
+dpd_params.learning_method = 'newton'; % Or 'ema' for exponential moving average.
 dpd_params.use_even = true; 
 dpd_params.use_conj = 0;    % Conjugate branch. Currently only set up for MP (lag = 0)
 dpd_params.use_dc_term = 0; % Adds an additional term for DC
