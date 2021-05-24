@@ -57,7 +57,7 @@ end
 [status,x] = check_inputs_WebLab(x, RMSin);                                %Input validation check
                                                                            
 if status  
-    GA_call();                                                             %Google Analytics
+%    GA_call();                                                             %Google Analytics
                                                                            %If everything is ok, proceed
     [InData]= createInCluster_WebLab(x,RMSin);                             %Create system specific Cluster struc
     [FormedCluster] = form_data_cluster(InData);                           %Convert input cluster to bin and apply hashing
