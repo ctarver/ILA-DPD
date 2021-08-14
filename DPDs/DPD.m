@@ -24,14 +24,8 @@ classdef DPD < handle
     end
     
     methods (Abstract)
-        function subclass_learn()
-            
-        end
-        
-        function subclass_use()
-            
-        end
-        
+        subclass_learn()
+        subclass_use()
     end
     
     methods (Static)

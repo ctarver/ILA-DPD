@@ -47,8 +47,8 @@ p.pa.required_fs = 200e6;
 p.pa.required_domain = Domain.TIME;
 
 %% Create the main modules
-pa = PA.create(p.pa);
 dpd = DPD.create(p.dpd);
+pa = PA.create(p.pa);
 
 %% Run Expierement
 tx_data = Signal.make_ofdm(p.ofdm);

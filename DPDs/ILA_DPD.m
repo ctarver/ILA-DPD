@@ -50,6 +50,8 @@ classdef ILA_DPD
             
             obj.predistorter = GMP(p);
             obj.postdistorter = GMP(p);
+            
+            assert(p.required_domain == Domain.TIME)
         end
         
         
@@ -116,11 +118,4 @@ classdef ILA_DPD
             legend('L1', 'Main Channel', 'U1', 'Location', 'best')
         end
     end
-end
-
-
-classdef LearningMethods
-   enumeration
-       NEWTON, EMA
-   end
 end
