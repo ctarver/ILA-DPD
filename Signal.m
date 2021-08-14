@@ -153,7 +153,7 @@ classdef Signal < handle
                 powbp = -99;
                 return;
             end
-     
+            
             switch type
                 case 'main'
                     lower = -0.5*ibw;
@@ -179,6 +179,13 @@ classdef Signal < handle
         
         function compute_occupied_bandwidth(obj)
             obj.obw = obw(obj.data, obj.current_fs);
+        end
+    end
+    
+    methods (Static)
+        function obj = make_ofdm(p)
+            % Make an OFDM signal with the desired properties. 
+            
         end
     end
 end
